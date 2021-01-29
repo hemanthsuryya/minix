@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <minix/com.h>
 #include <machine/archtypes.h>
+#include<minix/endpoint.h>
 #include "kernel/proc.h" /* for queue constants */
 
 static minix_timer_t sched_timer;
@@ -303,7 +304,11 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	int new_prio, new_quantum, new_cpu;
 
 	pick_cpu(rmp);
-
+	
+	if(rmp->priority >= 7){
+		printf("Minix 3: PID %d swapped in", _ENDPOINT_P(rmp->endpoint));
+	}
+	
 	if (flags & SCHEDULE_CHANGE_PRIO)
 		new_prio = rmp->priority;
 	else
